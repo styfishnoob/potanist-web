@@ -1,4 +1,4 @@
-import { InputNumberNullable } from "./input-number-nullable";
+import { InputNumberClamped } from "./input-number-clamped";
 
 interface Props {
     label: string;
@@ -16,7 +16,7 @@ export function InputIVRange(props: Props) {
         <div className="flex items-center gap-5">
             <span className="w-[4rem]">{props.label}</span>
             <div className="flex gap-1.5">
-                <InputNumberNullable
+                <InputNumberClamped
                     className="w-[4rem] h-[2rem] rounded-sm"
                     value={props.start}
                     min={MIN_IV}
@@ -25,7 +25,7 @@ export function InputIVRange(props: Props) {
                     onChange={(value) => props.onIVRangeChange(value, props.end)}
                 />
                 <span>〜</span>
-                <InputNumberNullable
+                <InputNumberClamped
                     className="w-[4rem] h-[2rem] rounded-sm"
                     value={props.end}
                     min={MIN_IV}
