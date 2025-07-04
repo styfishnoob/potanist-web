@@ -1,15 +1,13 @@
+import type { InputHTMLAttributes } from "react";
 import { Input } from "./ui/input";
 
-type Props = {
-    value: number | null;
+type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | "min" | "max"> & {
+    value: string | number | null;
     onChange: (value: number | null) => void;
     min: number;
     max: number;
-    disabled?: boolean;
-    className?: string;
 };
-
-export function InputNumberNullable(props: Props) {
+export function InputNumberClamped(props: Props) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const v = Number(value);
@@ -39,7 +37,6 @@ export function InputNumberNullable(props: Props) {
             value={props.value === null ? "" : props.value}
             onChange={handleChange}
             onBlur={handleBlur}
-            disabled={props.disabled}
         />
     );
 }
