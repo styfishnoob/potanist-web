@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
 
 import {
     Sidebar,
@@ -16,31 +17,24 @@ import {
 const data = {
     navMain: [
         {
-            title: "使い方",
-            url: "#",
-            items: [
-                {
-                    title: "Installation",
-                    url: "#",
-                },
-                {
-                    title: "Project Structure",
-                    url: "#",
-                },
-            ],
-        },
-        {
             title: "機能",
-            url: "#",
+            url: "/search",
             items: [
                 {
-                    title: "個体値などから検索",
-                    url: "#",
+                    title: "固定シンボル",
+                    url: "/search/static-encounter",
                 },
                 {
-                    title: "Data Fetching",
-                    url: "#",
-                    isActive: true,
+                    title: "ふしぎなおくりもの",
+                    url: "/search/mystery-gift",
+                },
+                {
+                    title: "タマゴ性格値",
+                    url: "/search/egg-pid",
+                },
+                {
+                    title: "タマゴ個体値",
+                    url: "/search/egg-iv",
                 },
             ],
         },
@@ -52,7 +46,6 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
         <Sidebar {...props}>
             <SidebarHeader></SidebarHeader>
             <SidebarContent>
-                {/* We create a SidebarGroup for each parent. */}
                 {data.navMain.map((item) => (
                     <SidebarGroup key={item.title}>
                         <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
@@ -60,8 +53,8 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                             <SidebarMenu>
                                 {item.items.map((item) => (
                                     <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild isActive={item.isActive}>
-                                            <a href={item.url}>{item.title}</a>
+                                        <SidebarMenuButton asChild>
+                                            <Link to={item.url}>{item.title}</Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))}
