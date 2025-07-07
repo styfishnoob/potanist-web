@@ -17,6 +17,16 @@ function SidebarController({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+    const { pathname } = useLocation();
+
+    useEffect(() => {
+        const sidebarHeader = document.querySelector("#sidebar-header");
+        if (sidebarHeader) {
+            window.scrollTo(0, 0);
+            window.scrollBy(0, -sidebarHeader.clientHeight);
+        }
+    }, [pathname]);
+    
     return (
         <>
             <SidebarProvider>
