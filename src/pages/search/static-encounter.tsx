@@ -175,8 +175,8 @@ export function SearchStaticEncounter() {
                     onChange={setMaxFrameSum}
                 />
             </div>
-            <div className="flex items-center pt-3">
-                <Button className="w-full" onClick={exeSearch}>
+            <div className="flex pt-3 items-center">
+                <Button className="w-full text-[oklch(0.985_0_0)]" onClick={exeSearch}>
                     実行
                 </Button>
             </div>

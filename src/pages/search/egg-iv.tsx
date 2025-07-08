@@ -190,7 +190,7 @@ export function SearchEggIV() {
                         />
                     </div>
                     <div className="flex items-center pt-3">
-                        <Button className="w-full" onClick={exeSearch}>
+                        <Button className="w-full text-[oklch(0.985_0_0)]" onClick={exeSearch}>
                             実行
                         </Button>
                     </div>
