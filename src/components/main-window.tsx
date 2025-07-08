@@ -17,7 +17,7 @@ export function MainWindow(props: Props) {
                     </span>
                     <div
                         id="output"
-                        className="w-full h-full overflow-auto flex flex-col px-5 bg-black divide-y-1 rounded-md text-white text-sm"
+                        className="w-full h-full overflow-auto flex flex-col px-5 bg-black divide-y-1 rounded-md text-white text-sm dark:border dark:border-chart-2"
                     ></div>
                 </div>
             </section>
