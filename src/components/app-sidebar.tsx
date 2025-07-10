@@ -1,5 +1,4 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 
 import {
     Sidebar,
@@ -17,7 +16,7 @@ import {
 const data = {
     navMain: [
         {
-            title: "機能",
+            title: "シード検索",
             url: "/search",
             items: [
                 {
@@ -42,19 +41,31 @@ const data = {
 };
 
 export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
+    const location = useLocation();
+
     return (
         <Sidebar {...props}>
-            <SidebarHeader></SidebarHeader>
-            <SidebarContent>
+            <SidebarHeader className="p-0"></SidebarHeader>
+            <SidebarContent className="p-6 gap-0 divide-y">
                 {data.navMain.map((item) => (
-                    <SidebarGroup key={item.title}>
-                        <SidebarGroupLabel>{item.title}</SidebarGroupLabel>
+                    <SidebarGroup className="py-2.5 px-0" key={item.title}>
+                        <SidebarGroupLabel className="text-sm px-0 font-bold">{item.title}</SidebarGroupLabel>
                         <SidebarGroupContent>
                             <SidebarMenu>
                                 {item.items.map((item) => (
                                     <SidebarMenuItem key={item.title}>
-                                        <SidebarMenuButton asChild>
-                                            <Link to={item.url}>{item.title}</Link>
+                                        <SidebarMenuButton
+                                            className="px-0 py-1 h-auto hover:bg- hover:text- active:bg-"
+                                            asChild
+                                        >
+                                            <Link
+                                                className={`px-0 py-1 h-auto font-medium ${
+                                                    location.pathname === item.url ? "text-primary/90" : ""
+                                                }`}
+                                                to={item.url}
+                                            >
+                                                <span>{item.title}</span>
+                                            </Link>
                                         </SidebarMenuButton>
                                     </SidebarMenuItem>
                                 ))}
