@@ -37,6 +37,9 @@ export function AppLayout(props: Props) {
                         </BreadcrumbItem>
                     </BreadcrumbList>
                 </Breadcrumb>
+                <div className="ml-auto">
+                    <ThemeToggle />
+                </div>
             </header>
             <MainWindow showDone={props.showDone}>{props.children}</MainWindow>
         </SidebarInset>
