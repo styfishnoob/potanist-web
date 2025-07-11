@@ -2,6 +2,7 @@ import { SidebarProvider, useSidebar } from "./components/ui/sidebar";
 import { AppSidebar } from "./components/app-sidebar";
 import { Outlet, useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import { ThemeProvider } from "./components/theme-provider";
 
 function SidebarController({ children }: { children: React.ReactNode }) {
     const location = useLocation();
@@ -26,16 +27,16 @@ function App() {
             window.scrollBy(0, -sidebarHeader.clientHeight);
         }
     }, [pathname]);
-    
+
     return (
-        <>
+        <ThemeProvider>
             <SidebarProvider>
                 <SidebarController>
                     <AppSidebar />
                     <Outlet />
                 </SidebarController>
             </SidebarProvider>
-        </>
+        </ThemeProvider>
     );
 }
 
