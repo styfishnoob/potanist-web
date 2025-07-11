@@ -37,6 +37,24 @@ const data = {
                 },
             ],
         },
+        {
+            title: "シード確認",
+            url: "/check",
+            items: [
+                {
+                    title: "ウツギ電話",
+                    url: "/check/elm-response",
+                },
+                {
+                    title: "徘徊位置",
+                    url: "/check/roamers-location",
+                },
+                {
+                    title: "コイントス",
+                    url: "/checl/coin-flip",
+                },
+            ],
+        },
     ],
 };
 

@@ -12,19 +12,21 @@ export function InputNumberClamped(props: Props) {
         const value = e.target.value;
         const v = Number(value);
 
-        if (value === "") {
+        if (isNaN(v) || value === "") {
             props.onChange(null);
-            return;
-        }
-
-        if (!isNaN(v)) {
-            const clamped = Math.max(props.min, Math.min(v, props.max));
-            props.onChange(clamped);
+        } else {
+            props.onChange(v);
         }
     };
 
     const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (props.value === null || e.target.value === "") {
+        const value = e.target.value;
+        const v = Number(value);
+
+        if (!isNaN(v)) {
+            const clamped = Math.max(props.min, Math.min(v, props.max));
+            props.onChange(clamped);
+        } else {
             props.onChange(props.min);
         }
     };
