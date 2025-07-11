@@ -58,27 +58,19 @@ export function SearchMysteryGift() {
         const output = document.querySelector("#output");
         if (!output) return;
 
-        const searchParams = createSearchParams(
-            IVRangesWithIgnore,
-            null,
-            null,
-            null,
-            null,
-            null,
-            maxAdvances,
-            maxFrameSum
-        );
-        const searchResults: ReturnParams[] = search_seeds_mystery_gift(searchParams);
+        const ivrwi = IVRangesWithIgnore;
+        const params = createSearchParams(ivrwi, null, null, null, null, null, maxAdvances, maxFrameSum);
+        const results: ReturnParams[] = search_seeds_mystery_gift(params);
         if (!reactRootRef.current) reactRootRef.current = createRoot(output);
 
         reactRootRef.current.render(
             <>
-                {searchResults.length === 0 ? (
+                {results.length === 0 ? (
                     <div className="py-[1rem]">
                         <span>条件に合うものは見つかりませんでした。</span>
                     </div>
                 ) : (
-                    searchResults.map((item, index) => <SearchResult key={index} item={item} />)
+                    results.map((item, index) => <Result key={index} item={item} />)
                 )}
             </>
         );
@@ -129,7 +121,7 @@ export function SearchMysteryGift() {
                 />
             </div>
             <div className="flex items-center pt-3">
-                <Button className="w-full text-[oklch(0.985_0_0)]" onClick={exeSearch}>
+                <Button className="w-full text-[oklch(0.985_0_0)] md:min-w-[340px]" onClick={exeSearch}>
                     実行
                 </Button>
             </div>
@@ -137,7 +129,7 @@ export function SearchMysteryGift() {
     );
 }
 
-function SearchResult(props: { item: ReturnParams }) {
+function Result(props: { item: ReturnParams }) {
     return (
         <div className="py-[1rem]">
             <div className="flex">

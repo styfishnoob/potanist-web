@@ -67,27 +67,19 @@ export function SearchStaticEncounter() {
         const output = document.querySelector("#output");
         if (!output) return;
 
-        const searchParams = createSearchParams(
-            IVRangesWithIgnore,
-            nature,
-            ability,
-            shiny,
-            tid,
-            sid,
-            maxAdvances,
-            maxFrameSum
-        );
-        const searchResults: ReturnParams[] = search_seeds_static_encounter(searchParams);
+        const ivrwi = IVRangesWithIgnore;
+        const params = createSearchParams(ivrwi, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
+        const results: ReturnParams[] = search_seeds_static_encounter(params);
         if (!reactRootRef.current) reactRootRef.current = createRoot(output);
 
         reactRootRef.current.render(
             <>
-                {searchResults.length === 0 ? (
+                {results.length === 0 ? (
                     <div className="py-[1rem]">
                         <span>条件に合うものは見つかりませんでした。</span>
                     </div>
                 ) : (
-                    searchResults.map((item, index) => <SearchResult key={index} item={item} />)
+                    results.map((item, index) => <Result key={index} item={item} />)
                 )}
             </>
         );
@@ -131,7 +123,7 @@ export function SearchStaticEncounter() {
             />
             <div className="flex items-center gap-5">
                 <span className="w-[4rem]">色違い</span>
-                <Checkbox className="scale-120" onCheckedChange={() => setShiny((prev) => !prev)} />
+                <Checkbox checked={shiny} className="scale-120" onCheckedChange={() => setShiny((prev) => !prev)} />
             </div>
             <div className="flex items-center gap-5">
                 <span className="w-[4rem]">TID</span>
@@ -176,7 +168,7 @@ export function SearchStaticEncounter() {
                 />
             </div>
             <div className="flex pt-3 items-center">
-                <Button className="w-full text-[oklch(0.985_0_0)]" onClick={exeSearch}>
+                <Button className="w-full text-[oklch(0.985_0_0)] md:min-w-[340px]" onClick={exeSearch}>
                     実行
                 </Button>
             </div>
@@ -184,7 +176,7 @@ export function SearchStaticEncounter() {
     );
 }
 
-function SearchResult(props: { item: ReturnParams }) {
+function Result(props: { item: ReturnParams }) {
     return (
         <div className="py-[1rem]">
             <div className="flex">

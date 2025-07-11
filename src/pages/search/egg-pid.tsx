@@ -33,18 +33,18 @@ export function SearchEggPID() {
         const output = document.querySelector("#output");
         if (!output) return;
 
-        const searchParams = createSearchParams(null, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
-        const searchResults: ReturnParams[] = search_seeds_egg_pid(searchParams, masudaMethod);
+        const params = createSearchParams(null, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
+        const results: ReturnParams[] = search_seeds_egg_pid(params, masudaMethod);
         if (!reactRootRef.current) reactRootRef.current = createRoot(output);
 
         reactRootRef.current.render(
             <>
-                {searchResults.length === 0 ? (
+                {results.length === 0 ? (
                     <div className="py-[1rem]">
                         <span>条件に合うものは見つかりませんでした。</span>
                     </div>
                 ) : (
-                    searchResults.map((item, index) => <SearchResult key={index} item={item} />)
+                    results.map((item, index) => <Result key={index} item={item} />)
                 )}
             </>
         );
@@ -77,11 +77,15 @@ export function SearchEggPID() {
             />
             <div className="flex items-center gap-5">
                 <span className="w-[4rem]">色違い</span>
-                <Checkbox className="scale-120" onCheckedChange={() => setShiny((prev) => !prev)} />
+                <Checkbox checked={shiny} className="scale-120" onCheckedChange={() => setShiny((prev) => !prev)} />
             </div>
             <div className="flex items-center gap-5">
                 <span className="w-[4rem]">国際孵化</span>
-                <Checkbox className="scale-120" onCheckedChange={() => setMasudaMethod((prev) => !prev)} />
+                <Checkbox
+                    checked={masudaMethod}
+                    className="scale-120"
+                    onCheckedChange={() => setMasudaMethod((prev) => !prev)}
+                />
             </div>
             <div className="flex items-center gap-5">
                 <span className="w-[4rem]">TID</span>
@@ -126,7 +130,7 @@ export function SearchEggPID() {
                 />
             </div>
             <div className="flex items-center pt-3">
-                <Button className="w-full text-[oklch(0.985_0_0)]" onClick={exeSearch}>
+                <Button className="w-full text-[oklch(0.985_0_0)] md:min-w-[340px]" onClick={exeSearch}>
                     実行
                 </Button>
             </div>
@@ -134,7 +138,7 @@ export function SearchEggPID() {
     );
 }
 
-function SearchResult(props: { item: ReturnParams }) {
+function Result(props: { item: ReturnParams }) {
     return (
         <div className="py-[1rem]">
             <div className="flex">
