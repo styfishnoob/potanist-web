@@ -6,6 +6,7 @@ type Props = Omit<InputHTMLAttributes<HTMLInputElement>, "onChange" | "value" | 
     onChange: (value: number | null) => void;
     min: number;
     max: number;
+    allowDecimal?: boolean;
 };
 export function InputNumberClamped(props: Props) {
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -22,6 +23,11 @@ export function InputNumberClamped(props: Props) {
     const handleBlur = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         const v = Number(value);
+
+        if (!props.allowDecimal && !/^-?\d+$/.test(value)) {
+            props.onChange(props.min);
+            return;
+        }
 
         if (!isNaN(v)) {
             const clamped = Math.max(props.min, Math.min(v, props.max));
