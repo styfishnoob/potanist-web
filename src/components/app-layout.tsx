@@ -12,7 +12,7 @@ import { ThemeToggle } from "./theme-toggle";
 
 type Props = {
     children: React.ReactNode;
-    showDone: boolean;
+    isLoading: boolean;
     pageCategory: string;
     pageName: string;
 };
@@ -41,7 +41,7 @@ export function AppLayout(props: Props) {
                     <ThemeToggle />
                 </div>
             </header>
-            <MainWindow showDone={props.showDone}>{props.children}</MainWindow>
+            <MainWindow isLoading={props.isLoading}>{props.children}</MainWindow>
         </SidebarInset>
     );
 }
