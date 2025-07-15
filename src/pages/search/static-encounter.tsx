@@ -3,7 +3,6 @@ import { createRoot, type Root } from "react-dom/client";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { AppLayout } from "@/components/app-layout";
 import { InputIVRange } from "@/components/input-iv-range";
 import { InputNumberClamped } from "@/components/input-number-clamped";
@@ -15,7 +14,7 @@ import { type ReturnParams, createSearchParams } from "@/types/params";
 import { POKEMON_NATURES } from "@/const/select-item/pokemon-natures";
 import { POKEMON_ABILITIES } from "@/const/select-item/pokemon-abilities";
 
-import { search_seeds_static_encounter } from "@/pkg/potanist_wasm";
+import WorkerStaticEncounter from "@/workers/search/static-encounter?worker";
 
 const DEFAULT_IVRANGES_WITH_IGNORE = {
     hp: { start: 31, end: 31, ignore: false },
@@ -73,10 +72,12 @@ export function SearchStaticEncounter() {
 
         await new Promise((resolve) => setTimeout(resolve, 0));
         const ivrwi = IVRangesWithIgnore;
-        const params = createSearchParams(ivrwi, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
-        const results: ReturnParams[] = search_seeds_static_encounter(params);
-        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
-
+        const searchParams = createSearchParams(ivrwi, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
+        const worker = new WorkerStaticEncounter();
+        const results: ReturnParams[] = await new Promise((resolve) => {
+            worker.onmessage = (event) => resolve(event.data);
+            worker.postMessage({ searchParams });
+        });
         reactRootRef.current.render(
             <>
                 {results.length === 0 ? (

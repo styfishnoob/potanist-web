@@ -3,7 +3,6 @@ import { createRoot, type Root } from "react-dom/client";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { AppLayout } from "@/components/app-layout";
 import { InputIVRange } from "@/components/input-iv-range";
 import { InputNumberClamped } from "@/components/input-number-clamped";
@@ -11,7 +10,7 @@ import { InputNumberClamped } from "@/components/input-number-clamped";
 import type { IVRangesWithIgnore, IVRangeWithIgnore } from "@/types/ivs";
 import { type ReturnParams, createSearchParams } from "@/types/params";
 
-import { search_seeds_mystery_gift } from "@/pkg/potanist_wasm";
+import WorkerMysteryGift from "@/workers/search/mystery-gift?worker";
 
 const DEFAULT_IVRANGES_WITH_IGNORE = {
     hp: { start: 31, end: 31, ignore: false },
@@ -64,9 +63,12 @@ export function SearchMysteryGift() {
 
         await new Promise((resolve) => setTimeout(resolve, 0));
         const ivrwi = IVRangesWithIgnore;
-        const params = createSearchParams(ivrwi, null, null, null, null, null, maxAdvances, maxFrameSum);
-        const results: ReturnParams[] = search_seeds_mystery_gift(params);
-        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        const searchParams = createSearchParams(ivrwi, null, null, null, null, null, maxAdvances, maxFrameSum);
+        const worker = new WorkerMysteryGift();
+        const results: ReturnParams[] = await new Promise((resolve) => {
+            worker.onmessage = (event) => resolve(event.data);
+            worker.postMessage({ searchParams });
+        });
 
         reactRootRef.current.render(
             <>

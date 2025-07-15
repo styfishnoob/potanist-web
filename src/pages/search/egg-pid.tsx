@@ -3,7 +3,6 @@ import { createRoot, type Root } from "react-dom/client";
 
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
-
 import { AppLayout } from "@/components/app-layout";
 import { InputNumberClamped } from "@/components/input-number-clamped";
 import { SelectStatus } from "@/components/select-status";
@@ -14,7 +13,7 @@ import { POKEMON_ABILITIES } from "@/const/select-item/pokemon-abilities";
 import { POKEMON_GENDERS } from "@/const/select-item/pokemon-genders";
 import { POKEMON_NATURES } from "@/const/select-item/pokemon-natures";
 
-import { search_seeds_egg_pid } from "@/pkg/potanist_wasm";
+import WorkerEggPID from "@/workers/search/egg-pid?worker";
 
 export function SearchEggPID() {
     const reactRootRef = useRef<Root | null>(null);
@@ -37,9 +36,12 @@ export function SearchEggPID() {
         reactRootRef.current.render(<></>);
         setIsLoading(true);
 
-        const params = createSearchParams(null, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
-        const results: ReturnParams[] = search_seeds_egg_pid(params, masudaMethod);
-        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        const searchParams = createSearchParams(null, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
+        const worker = new WorkerEggPID();
+        const results: ReturnParams[] = await new Promise((resolve) => {
+            worker.onmessage = (event) => resolve(event.data);
+            worker.postMessage({ searchParams, masudaMethod });
+        });
 
         reactRootRef.current.render(
             <>
