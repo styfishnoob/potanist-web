@@ -18,7 +18,7 @@ import { search_seeds_egg_pid } from "@/pkg/potanist_wasm";
 
 export function SearchEggPID() {
     const reactRootRef = useRef<Root | null>(null);
-    const [showDone, setShowDone] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [nature, setNature] = useState<string>("-1");
     const [gender, setGender] = useState<string>("-1");
     const [ability, setAbility] = useState<string>("-1");
@@ -29,9 +29,13 @@ export function SearchEggPID() {
     const [maxAdvances, setMaxAdvances] = useState<number | null>(500);
     const [maxFrameSum, setMaxFrameSum] = useState<number | null>(1000);
 
-    const exeSearch = () => {
+    const exeSearch = async () => {
         const output = document.querySelector("#output");
         if (!output) return;
+
+        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        reactRootRef.current.render(<></>);
+        setIsLoading(true);
 
         const params = createSearchParams(null, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
         const results: ReturnParams[] = search_seeds_egg_pid(params, masudaMethod);
@@ -49,14 +53,11 @@ export function SearchEggPID() {
             </>
         );
 
-        if (showDone == false) {
-            setShowDone(true);
-            setTimeout(() => setShowDone(false), 3000);
-        }
+        setIsLoading(false);
     };
 
     return (
-        <AppLayout pageCategory="機能" pageName="タマゴ性格値" showDone={showDone}>
+        <AppLayout pageCategory="機能" pageName="タマゴ性格値" isLoading={isLoading}>
             <SelectStatus
                 label="性格"
                 value={nature}

@@ -33,7 +33,7 @@ const DEFAULT_IVRANGES_WITH_IGNORE = {
 
 export function SearchEggIV() {
     const reactRootRef = useRef<Root | null>(null);
-    const [showDone, setShowDone] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [maxAdvances, setMaxAdvances] = useState<number | null>(500);
     const [maxFrameSum, setMaxFrameSum] = useState<number | null>(1000);
     const [IVRangesWithIgnore, setIVRangesWithIgnore] = useState<IVRangesWithIgnore>({
@@ -77,10 +77,15 @@ export function SearchEggIV() {
         }));
     };
 
-    const exeSearch = () => {
+    const exeSearch = async () => {
         const output = document.querySelector("#output");
         if (!output) return;
 
+        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        reactRootRef.current.render(<></>);
+        setIsLoading(true);
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
         const ivrwi = IVRangesWithIgnore;
         const params = createSearchParams(ivrwi, null, null, null, null, null, maxAdvances, maxFrameSum);
         const results: ReturnParams[] = search_seeds_egg_iv(params, firstParentIVs, secondParentIVs);
@@ -98,14 +103,11 @@ export function SearchEggIV() {
             </>
         );
 
-        if (showDone == false) {
-            setShowDone(true);
-            setTimeout(() => setShowDone(false), 3000);
-        }
+        setIsLoading(false);
     };
 
     return (
-        <AppLayout pageCategory="機能" pageName="タマゴ個体値" showDone={showDone}>
+        <AppLayout pageCategory="機能" pageName="タマゴ個体値" isLoading={isLoading}>
             <div className="flex flex-col divide-y">
                 <div className="flex flex-col gap-2.5 pb-5">
                     {(Object.entries(IVRangesWithIgnore) as [keyof IVRangesWithIgnore, IVRangeWithIgnore][]).map(

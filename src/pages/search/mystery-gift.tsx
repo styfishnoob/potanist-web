@@ -24,7 +24,7 @@ const DEFAULT_IVRANGES_WITH_IGNORE = {
 
 export function SearchMysteryGift() {
     const reactRootRef = useRef<Root | null>(null);
-    const [showDone, setShowDone] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [maxAdvances, setMaxAdvances] = useState<number | null>(500);
     const [maxFrameSum, setMaxFrameSum] = useState<number | null>(1000);
     const [IVRangesWithIgnore, setIVRangesWithIgnore] = useState<IVRangesWithIgnore>({
@@ -54,10 +54,15 @@ export function SearchMysteryGift() {
         }
     };
 
-    const exeSearch = () => {
+    const exeSearch = async () => {
         const output = document.querySelector("#output");
         if (!output) return;
 
+        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        reactRootRef.current.render(<></>);
+        setIsLoading(true);
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
         const ivrwi = IVRangesWithIgnore;
         const params = createSearchParams(ivrwi, null, null, null, null, null, maxAdvances, maxFrameSum);
         const results: ReturnParams[] = search_seeds_mystery_gift(params);
@@ -75,14 +80,11 @@ export function SearchMysteryGift() {
             </>
         );
 
-        if (showDone == false) {
-            setShowDone(true);
-            setTimeout(() => setShowDone(false), 3000);
-        }
+        setIsLoading(false);
     };
 
     return (
-        <AppLayout pageCategory="機能" pageName="ふしぎなおくりもの" showDone={showDone}>
+        <AppLayout pageCategory="機能" pageName="ふしぎなおくりもの" isLoading={isLoading}>
             {(Object.entries(IVRangesWithIgnore) as [keyof IVRangesWithIgnore, IVRangeWithIgnore][]).map(([key, _]) => (
                 <div key={key} className="flex items-center gap-2.5">
                     <InputIVRange

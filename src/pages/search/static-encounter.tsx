@@ -28,7 +28,7 @@ const DEFAULT_IVRANGES_WITH_IGNORE = {
 
 export function SearchStaticEncounter() {
     const reactRootRef = useRef<Root | null>(null);
-    const [showDone, setShowDone] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
     const [nature, setNature] = useState<string>("-1");
     const [ability, setAbility] = useState<string>("-1");
     const [shiny, setShiny] = useState<boolean>(false);
@@ -63,10 +63,15 @@ export function SearchStaticEncounter() {
         }
     };
 
-    const exeSearch = () => {
+    const exeSearch = async () => {
         const output = document.querySelector("#output");
         if (!output) return;
 
+        if (!reactRootRef.current) reactRootRef.current = createRoot(output);
+        reactRootRef.current.render(<></>);
+        setIsLoading(true);
+
+        await new Promise((resolve) => setTimeout(resolve, 0));
         const ivrwi = IVRangesWithIgnore;
         const params = createSearchParams(ivrwi, nature, ability, shiny, tid, sid, maxAdvances, maxFrameSum);
         const results: ReturnParams[] = search_seeds_static_encounter(params);
@@ -84,14 +89,11 @@ export function SearchStaticEncounter() {
             </>
         );
 
-        if (showDone == false) {
-            setShowDone(true);
-            setTimeout(() => setShowDone(false), 3000);
-        }
+        setIsLoading(false);
     };
 
     return (
-        <AppLayout pageCategory="機能" pageName="固定シンボル" showDone={showDone}>
+        <AppLayout pageCategory="機能" pageName="固定シンボル" isLoading={isLoading}>
             {(Object.entries(IVRangesWithIgnore) as [keyof IVRangesWithIgnore, IVRangeWithIgnore][]).map(([key, _]) => (
                 <div key={key} className="flex items-center gap-2.5">
                     <InputIVRange
