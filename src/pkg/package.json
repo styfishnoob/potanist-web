@@ -1,0 +1,15 @@
+{
+  "name": "potanist-wasm",
+  "type": "module",
+  "version": "0.1.0",
+  "files": [
+    "potanist_wasm_bg.wasm",
+    "potanist_wasm.js",
+    "potanist_wasm.d.ts"
+  ],
+  "main": "potanist_wasm.js",
+  "types": "potanist_wasm.d.ts",
+  "sideEffects": [
+    "./snippets/*"
+  ]
+}
