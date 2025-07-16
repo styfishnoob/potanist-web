@@ -43,7 +43,7 @@ const data = {
             items: [
                 {
                     title: "ウツギ電話",
-                    url: "/check/elm-response",
+                    url: "/check/response-sequence",
                 },
                 {
                     title: "徘徊位置",
@@ -51,7 +51,7 @@ const data = {
                 },
                 {
                     title: "コイントス",
-                    url: "/checl/coin-flip",
+                    url: "/check/coin-flip",
                 },
             ],
         },
@@ -77,11 +77,12 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                                             asChild
                                         >
                                             <Link
-                                                className={`px-0 py-1 h-auto font-medium ${
+                                                className={`px-0 py-1 h-auto font-medium pl-[1rem] ${
                                                     location.pathname === item.url ? "text-primary/90" : ""
                                                 }`}
                                                 to={item.url}
                                             >
+                                                <span>-</span>
                                                 <span>{item.title}</span>
                                             </Link>
                                         </SidebarMenuButton>
